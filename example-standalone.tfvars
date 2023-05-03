@@ -1,4 +1,5 @@
 name = "demo-standalone"
+labels   = ["terraform-cts", "nginx"]
 
 aws_cloud_router_connections = {
   aws_region = "us-east-1"
