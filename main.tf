@@ -17,6 +17,10 @@ terraform {
   experiments      = [module_variable_optional_attrs] # until consul-terraform-sync supports terraform v1.3+
 }
 
+provider "aws" {
+  region = var.aws_cloud_router_connections != null ? var.aws_cloud_router_connections.aws_region : "us-east-1"
+}
+
 module "packetfabric" {
   for_each = var.services
   source   = "packetfabric/cloud-router-module/connectivity"
