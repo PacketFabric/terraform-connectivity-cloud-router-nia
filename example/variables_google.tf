@@ -24,5 +24,5 @@ variable "gcp_subnet_cidr1" {
 variable "google_pop" {
   type        = string
   description = "The POP in which you want to provision the connection"
-  default     = "SFO1"
+  default     = "PDX2"
 }

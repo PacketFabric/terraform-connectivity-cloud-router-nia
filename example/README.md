@@ -25,7 +25,7 @@ Ensure you have the following items available:
 - [AWS Account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html)
 - [AWS Access and Secret Keys](https://docs.aws.amazon.com/general/latest/gr/aws-security-credentials.html)
 - [Google Service Account](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances)
-- [Packet Fabric Billing Account](https://docs.packetfabric.com/api/examples/account_uuid/)
+- [PacketFabric Billing Account](https://docs.packetfabric.com/api/examples/account_uuid/)
 - [PacketFabric API key](https://docs.packetfabric.com/admin/my_account/keys/)
 
 ## Quick start
@@ -110,12 +110,7 @@ You can also login to [PacketFabric](https://portal.packetfabric.com/) to follow
 
 **Note:** You can find the Terraform state file in `/home/ubuntu/sync-tasks/packetFabric-cloud-router/.terraform/`.
 
-7. Once the connection between AWS and Google Cloud is established, let's create a new nginx demo service in Google Cloud, edit `google_vm_consul_client_nginx.tf` and comment out its content, then run terraform apply
-
-```sh
-terraform plan
-terraform apply
-```
+7. Once the connection between AWS and Google Cloud is established, let's wait for the service to register automatically to the Consul server.
 
 Back on the Consul demo server, run `consul members` and confirm the new node has been added. 
 
@@ -130,7 +125,7 @@ nginx-google   10.5.1.20:8301  alive   client  1.15.2  2         dc1  default   
 
 8. You can test connectivity between AWS and Google by navigating to `http://<aws_ec2_public_ip_server>:8089/` and simulate traffic between the 2 nginx servers.
 
-**Note:** Default login/password for Locust is ``demo:packetfabric``.
+**Note:** Default login/password for Locust is ``demo:packetfabric``. Use Private IP of the consul client nodes.
 
 9. Now, let's remove the node from the Consul server, destroy the PacketFabric Cloud Router.
 
@@ -139,7 +134,9 @@ consul force-leave -prune nginx-aws
 cd /home/ubuntu/sync-tasks/packetFabric-cloud-router;../../terraform destroy
 ```
 
-10. Destroy all remote objects managed by the Terraform configuration.
+10. Confirm the PacketFabric Cloud Router has been deleted and the `nginx-aws` isn't registered anymore in Consul.
+
+11. Destroy the rest of the demo infra.
 
 ```sh
 terraform destroy
