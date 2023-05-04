@@ -13,7 +13,7 @@ By leveraging [Consul](https://www.consul.io) catalog information, this module o
 With the PacketFabric Cloud Router CTS module, application teams can easily add (or remove) connections between AWS and Google Cloud VPCs via the secure and reliable [PacketFabric's Network-as-a-Service platform](https://packetfabric.com/). This module streamlines the establishment of connections, the creation of Cloud Routers, and the integration of essential components for both AWS and Google Cloud.
 
 <p align="left">
-  <img src="https://github.com/PacketFabric/terraform-connectivity-cloud-router-nia/blob/main/images/diagram_cloud_router_aws_google_consul.png" alt="Diagram illustrating the connectivity between AWS, Google Cloud, and Consul using a PacketFabric Cloud Router">
+  <img src="https://raw.githubusercontent.com/PacketFabric/terraform-connectivity-cloud-router-nia/main/images/diagram_cloud_router_aws_google_consul.png" alt="Diagram illustrating the connectivity between AWS, Google Cloud, and Consul using a PacketFabric Cloud Router">
 </p>
 
 ## Feature
