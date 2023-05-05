@@ -28,7 +28,7 @@ sudo cat <<EOT > /etc/consul.d/nginx.json
 }
 EOT
 # start consul client
-ip=$(ip addr show eth0 | grep 'inet ' | awk '{print $2}' | cut -f1 -d'/')
+ip=$(ip addr show ens4 | grep 'inet ' | awk '{print $2}' | cut -f1 -d'/')
 nohup consul agent -data-dir=/tmp/consul -node=nginx-google \
     -bind=$ip -enable-script-checks=true -config-dir=/etc/consul.d -client 0.0.0.0 -ui &
 
@@ -53,4 +53,8 @@ EOT
 
 sudo docker run --restart=unless-stopped --name=locust -dit -p 8089:8089 -v /home/$user/locust:/mnt/locust locustio/locust:latest -f /mnt/locust/locustfile.py --host http://10.2.1.x --web-auth demo:packetfabric
 
-sudo consul join ${consul_server_private_ip}
+end_time=$(date -d "1 hour" +%s)
+while [ $(date +%s) -lt $end_time ]; do
+  sudo consul join ${consul_server_private_ip} && break
+  sleep 30
+done

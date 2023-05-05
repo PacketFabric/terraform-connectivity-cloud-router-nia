@@ -3,13 +3,9 @@ resource "google_compute_firewall" "ssh-rule1" {
   name     = "${random_pet.name.id}-1"
   network  = google_compute_network.vpc_1.name
   allow {
-    protocol = "icmp"
+    protocol = "all"
   }
-  allow {
-    protocol = "tcp"
-    ports    = ["80"]
-  }
-  source_ranges = ["0.0.0.0/0"]
+  source_ranges = ["${var.aws_vpc_cidr1}", "${var.gcp_subnet_cidr1}"]
 }
 
 resource "google_compute_firewall" "ssh-rule2" {
