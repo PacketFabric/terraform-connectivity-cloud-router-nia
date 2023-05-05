@@ -131,7 +131,6 @@ nginx-google   10.5.1.20:8301  alive   client  1.15.2  2         dc1  default   
 
 ```
 consul force-leave -prune nginx-aws
-cd /home/ubuntu/sync-tasks/packetFabric-cloud-router;../../terraform destroy
 ```
 
 10. Confirm the PacketFabric Cloud Router has been deleted and the `nginx-aws` isn't registered anymore in Consul and everything has been removed in AWS and Google (especially the AWS Direct Connect Gateway Associations which can take up to 20min to be removed).
