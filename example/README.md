@@ -30,6 +30,8 @@ Ensure you have the following items available:
 
 ## Quick start
 
+**Estimated time:** ~45 min
+
 1. Set the PacketFabric API key and Account ID in your terminal as environment variables.
 
 ```sh
@@ -68,27 +70,7 @@ terraform plan
 terraform apply
 ```
 
-4. Review the configuration
-
-Connect to the Consul server in your browser `http://<aws_ec2_public_ip_server>:8500/ui`
-
-SSH to the Consul server using `ubuntu` user (then `sudo su -`) and look at the log `cat  /var/log/cloud-init-output.log` and run `consul members` to confirm
-
-Example:
-```
-root@ip-10-2-1-15:~# consul members
-Node       Address          Status  Type    Build   Protocol  DC   Partition  Segment
-agent-one  10.2.1.15:8301   alive   server  1.15.2  2         dc1  default    <all>
-```
-
-5. Now, let's create a new nginx demo service in AWS, edit `aws_ec2_consul_client_nginx.tf` and comment out its content, then run terraform apply
-
-```sh
-terraform plan
-terraform apply
-```
-
-6. Back on the Consul demo server, run `consul members` and confirm the new node has been added. You can also look on `http://<aws_ec2_public_ip_server>:8500/ui`.
+4. Once terraform apply is completed, SSH to the Consul server using `ubuntu` user and its public IP, run `consul members` to confirm the server is up and confirm the nodes have been added. You can also look on `http://<aws_ec2_public_ip_server>:8500/ui`.
 
 Example:
 ```
@@ -98,7 +80,7 @@ agent-one  10.2.1.15:8301   alive   server  1.15.2  2         dc1  default    <a
 nginx-aws  10.2.1.220:8301  alive   client  1.15.2  2         dc1  default    <default>
 ```
 
-Because we configure CTS to create a connection between AWS and Google when a service called `nginx-demo-aws` was being discovered, a PacketFabric Cloud Router to connect both clouds will be created (this operation can take up to 30min).
+Because we configured CTS in this example to create a connection between AWS and Google when a service called `nginx-demo-aws` is discovered, a PacketFabric Cloud Router to connect both clouds will be created (this operation can take up to 30min).
 
 You can check the CTS status with:
 ```
@@ -106,11 +88,9 @@ curl -s localhost:8558/v1/status | jq .
 curl -s localhost:8558/v1/tasks | jq .
 ```
 
-You can also login to [PacketFabric](https://portal.packetfabric.com/) to follow the progress.
+Tail the logs: `tail -f /var/log/cloud-init-output.log` and login to [PacketFabric](https://portal.packetfabric.com/) to follow the progress.
 
-**Note:** You can find the Terraform state file in `/home/ubuntu/sync-tasks/packetFabric-cloud-router/.terraform/`.
-
-7. Once the connection between AWS and Google Cloud is established, let's wait for the service to register automatically to the Consul server.
+5. Once the connection between AWS and Google Cloud is established, let's wait for the service to register automatically to the Consul server.
 
 Back on the Consul demo server, run `consul members` and confirm the new node has been added. 
 
@@ -123,19 +103,39 @@ nginx-aws      10.2.1.220:8301  alive   client  1.15.2  2         dc1  default  
 nginx-google   10.5.1.20:8301  alive   client  1.15.2  2         dc1  default    <default>
 ```
 
-8. You can test connectivity between AWS and Google by navigating to `http://<aws_ec2_public_ip_server>:8089/` and simulate traffic between the 2 nginx servers.
+6. You can test connectivity between AWS and Google by navigating to `http://<aws_ec2_public_ip_server>:8089/` and simulate traffic between the 2 nginx servers.
 
 **Note:** Default login/password for Locust is ``demo:packetfabric``. Use Private IP of the consul client nodes.
 
-9. Now, let's remove the node from the Consul server, destroy the PacketFabric Cloud Router.
+7. Now, proceed to remove the `nginx-aws` node from the Consul cluster. This action will automatically trigger the destruction of the associated PacketFabric Cloud Router.
+
+To execute this step, SSH to the Consul Client running in AWS using `ubuntu` user and its public IP, then run the following commands:
 
 ```
-consul force-leave -prune nginx-aws
+consul members
+consul leave
 ```
 
-10. Confirm the PacketFabric Cloud Router has been deleted and the `nginx-aws` isn't registered anymore in Consul and everything has been removed in AWS and Google (especially the AWS Direct Connect Gateway Associations which can take up to 20min to be removed).
+8. On the Consul server, confirm the `nginx-aws` node has been removed:
 
-11. Destroy the rest of the demo infra.
+```
+consul members
+```
+
+Example:
+```
+root@ip-10-2-1-15:~# consul members
+Node       Address          Status  Type    Build   Protocol  DC   Partition  Segment
+agent-one      10.2.1.15:8301   alive   server  1.15.2  2         dc1  default    <all>
+nginx-aws      10.2.1.220:8301  left   client  1.15.2  2         dc1  default    <default>
+nginx-google   10.5.1.20:8301  failed   client  1.15.2  2         dc1  default    <default>
+```
+
+Note the `nginx-google` should turn to **failed** and **red** in the Consul UI as the connectivity between AWS and Google has been removed.
+
+9. Confirm the PacketFabric Cloud Router has been deleted and the `nginx-aws` isn't registered anymore in Consul and everything has been removed in AWS and Google (especially the AWS Direct Connect Gateway Associations which can take up to 20min to be removed).
+
+10. Destroy the rest of the demo infra.
 
 ```sh
 terraform destroy
@@ -143,4 +143,33 @@ terraform destroy
 
 ## Troubleshooting
 
-Login on the Consul server node and tail `/var/log/cloud-init-output.log`.
+- Login on the Consul server node: `tail -f /var/log/cloud-init-output.log`.
+
+- To test the CTS module mechanics without creating resources in AWS and Google, modify the `user-data-ubuntu-consul-server.tpl` file by commenting out the relevant lines. This will result in the creation of only a PacketFabric Cloud Router, without establishing any connections.
+
+```
+# aws_cloud_router_connections = {
+#   aws_region = "${aws_region}"
+#   aws_vpc_id = "${aws_vpc_id}"
+#   aws_pop    = "${aws_pop}"
+# }
+
+# google_cloud_router_connections = {
+#   google_project  = "${google_project}"
+#   google_region   = "${google_region}"
+#   google_network  = "${google_network}"
+#   google_pop      = "${google_pop}"
+# }
+```
+
+- If you need to login to root: `sudo su -`
+
+- You can find the CTS modules files under `/home/ubuntu/sync-tasks`.
+
+- You can use `consul force-leave -prune nginx-aws` to removed the `nginx-aws` node after the node left the cluster (make sure consul is not running on the AWS client anymore, otherwise, the CTS module will be triggered again).
+
+- To remove the nginx-aws node after it has left the cluster, ensure that the Consul service is no longer running on the AWS client. Otherwise, the CTS module might be triggered again. Execute the following command to force the removal of the `nginx-aws` node:
+
+`consul force-leave -prune nginx-aws`
+
+This command will also clean up the node's metadata in the cluster.
