@@ -38,7 +38,7 @@ variable "capacity" {
 variable "regions" {
   description = "The list of regions for the PacketFabric Cloud Router."
   type        = list(string)
-  default     = ["US", "UK"]
+  default     = ["US"]
 }
 
 variable "cr_id" {
