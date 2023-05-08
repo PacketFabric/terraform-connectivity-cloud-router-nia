@@ -55,6 +55,8 @@ export TF_VAR_public_key="ssh-rsa AAAA...= user@mac.lan" # used to create to acc
 export TF_VAR_my_ip="1.2.3.1/32" # replace with your public IP address (used in AWS/Google security groups)
 ```
 
+**Note**: To convert a pretty-printed JSON into a single line JSON string: `jq -c '.' google_credentials.json`.
+
 2. Initialize Terraform, create an execution plan and execute the plan.
 
 ```sh

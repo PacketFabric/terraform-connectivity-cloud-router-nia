@@ -34,8 +34,8 @@ resource "google_compute_instance" "vm_consul_client" {
     subnetwork = google_compute_subnetwork.subnet_1.name
     access_config {}
   }
-  metadata_startup_script = templatefile("user-data-ubuntu-consul-client-nginx-google.tpl", { 
-    consul_server_private_ip = aws_instance.ec2_instance_consul_server.private_ip 
+  metadata_startup_script = templatefile("user-data-ubuntu-consul-client-nginx-google.tpl", {
+    consul_server_private_ip = aws_instance.ec2_instance_consul_server.private_ip
   })
   metadata = {
     sshKeys = "ubuntu:${var.public_key}"
