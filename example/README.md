@@ -111,7 +111,7 @@ nginx-google   10.5.1.20:8301  alive   client  1.15.2  2         dc1  default   
 
 7. Now, proceed to remove the `nginx-aws` node from the Consul cluster. This action will automatically trigger the destruction of the associated PacketFabric Cloud Router.
 
-To execute this step, SSH to the Consul Client running in AWS using `ubuntu` user and its public IP, then run the following commands:
+To execute this step, SSH to the **Consul Client** running in AWS using `ubuntu` user and its public IP, then run the following commands:
 
 ```
 consul members

@@ -13,3 +13,11 @@ google_cloud_router_connections = {
   google_network = "default"
   google_pop     = "SFO1" # https://packetfabric.com/locations/cloud-on-ramps
 }
+
+azure_cloud_router_connections = {
+  azure_region          = "North Central US"
+  azure_resource_group  = "MyResourceGroup"
+  azure_vnet            = "MyVnet"
+  azure_pop             = "Chicago" # https://docs.microsoft.com/en-us/azure/expressroute/expressroute-locations-providers
+  azure_subscription_id = "00000000-0000-0000-0000-000000000000"
+}
