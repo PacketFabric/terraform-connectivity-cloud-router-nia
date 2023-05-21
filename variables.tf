@@ -48,8 +48,8 @@ variable "cr_id" {
 
 # PacketFabric Cloud Router Connection AWS
 variable "aws_cloud_router_connections" {
-  description = "An object representing the AWS Cloud Router Connections."
-  type = object({
+  description = "List of objects representing the AWS Cloud Router Connections."
+  type = list(object({
     name       = optional(string)
     labels     = optional(list(string))
     aws_region = string
@@ -64,16 +64,21 @@ variable "aws_cloud_router_connections" {
       type   = string
     })))
     bgp_prefixes_match_type = optional(string)
-  })
+  }))
   default = null
+
+  validation {
+    condition     = length(coalesce(var.aws_cloud_router_connections, [])) <= 1
+    error_message = "You must provide no more than one AWS Cloud Router Connection."
+  }
 }
 
 # PacketFabric Cloud Router Conection Google
 variable "google_cloud_router_connections" {
-  description = "A object representing the Google Cloud Router Connections."
-  type = object({
-    name = optional(string)
-    labels = optional(list(string))
+  description = "List of objects representing the Google Cloud Router Connections."
+  type = list(object({
+    name           = optional(string)
+    labels         = optional(list(string))
     google_project = string
     google_region  = string
     google_network = string
@@ -86,16 +91,16 @@ variable "google_cloud_router_connections" {
       type   = string
     })))
     bgp_prefixes_match_type = optional(string)
-  })
+  }))
   default = null
 }
 
 # PacketFabric Cloud Router Conection Azure -- not yet available open an issue on github
 variable "azure_cloud_router_connections" {
-  description = "An object representing the Azure Cloud Router Connections."
-  type = object({
-    name = optional(string)
-    labels = optional(list(string))
+  description = "List of objects representing the Azure Cloud Router Connections."
+  type = list(object({
+    name                  = optional(string)
+    labels                = optional(list(string))
     azure_region          = string
     azure_resource_group  = string
     azure_vnet            = string
@@ -110,8 +115,13 @@ variable "azure_cloud_router_connections" {
     })))
     bgp_prefixes_match_type = optional(string)
     provider                = optional(string) # Use "Packet Fabric Test" for internal PF dev testing
-  })
+  }))
   default = null
+
+  validation {
+    condition     = length(coalesce(var.azure_cloud_router_connections, [])) <= 1
+    error_message = "You must provide no more than one Azure Cloud Router Connection."
+  }
 }
 
 variable "aws_in_prefixes" {

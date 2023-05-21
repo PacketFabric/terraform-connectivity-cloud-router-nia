@@ -18,6 +18,7 @@ terraform {
 }
 
 provider "aws" {
+  # we have to set it to something in case no aws connections are defined
   region = var.aws_cloud_router_connections != null ? var.aws_cloud_router_connections.aws_region : "us-east-1"
 }
 
@@ -35,6 +36,8 @@ module "packetfabric" {
   google_cloud_router_connections = var.google_cloud_router_connections
   # PacketFabric Cloud Router Connection to AWS
   aws_cloud_router_connections = var.aws_cloud_router_connections
+  # PacketFabric Cloud Router Connection to Azure
+  azure_cloud_router_connections = var.azure_cloud_router_connections
 }
 
 locals {

@@ -133,7 +133,7 @@ export ARM_TENANT_ID="00000000-0000-0000-0000-000000000000"
 | name                      | Yes      | | The base name all Network services created in PacketFabric, Google and AWS |
 | labels                    | No       | terraform-cts | The labels to be assigned to the PacketFabric Cloud Router |
 | asn                       | No       | 4556 | The Autonomous System Number (ASN) for the PacketFabric Cloud Router |
-| capacity                  | No        | "10Gbps" | The capacity of the PacketFabric Cloud Router |
+| capacity                  | No        | ">100Gbps" | The capacity of the PacketFabric Cloud Router |
 | regions                   | No       | ["US"] | The list of regions for the PacketFabric Cloud Router (["US", "UK"]) |
 | aws_cloud_router_connections | Yes     | | A list of objects representing the AWS Cloud Router Connections (Private VIF) |
 | google_cloud_router_connections | Yes  | | A list of objects representing the Google Cloud Router Connections |
@@ -156,7 +156,7 @@ Please be aware that creating AWS or Azure Cloud Router connections can take up 
 
 | Input Variable | Required | Default | Description |
 |----------------|----------|----------|------------|
-| name                      | No      | | If not specified, the PacketFabric Cloud Router Connection and all AWS Network services will share the same name as the one defined in the Cloud Router |
+| name                      | Yes      | | The name of the PacketFabric Cloud Router Connection and other resources created in Azure |
 | labels                    | No       | terraform | If not specified, default to the same labels assigned to the PacketFabric Cloud Router |
 | aws_region | Yes | | The AWS region |
 | aws_vpc_id | Yes | | The AWS VPC ID<br/>:warning: **must be in the region defined above and makes sure your VPC is not already attached to an existing Virtual Private Gateway**|
@@ -174,7 +174,7 @@ Please be aware that creating AWS or Azure Cloud Router connections can take up 
 
 | Input Variable | Required | Default | Description |
 |----------------|----------|----------|------------|
-| name                      | No      | | If not specified, the PacketFabric Cloud Router Connection and all Google Network services will share the same name as the one defined in the Cloud Router |
+| name                      | Yes      | | The name of the PacketFabric Cloud Router Connection and other resources created in Google |
 | labels                    | No       | terraform | If not specified, default to the same labels assigned to the PacketFabric Cloud Router |
 | google_project | Yes | | The Google Cloud project ID |
 | google_region | Yes | | The Google Cloud region |
@@ -192,7 +192,7 @@ Please be aware that creating AWS or Azure Cloud Router connections can take up 
 
 | Input Variable | Required | Default | Description |
 |----------------|----------|----------|------------|
-| name                      | No      | | If not specified, the PacketFabric Cloud Router Connection and all Azure Network services will share the same name as the one defined in the Cloud Router |
+| name                      | Yes      | | The name of the PacketFabric Cloud Router Connection and other resources created in Azure |
 | labels                    | No       | terraform | If not specified, default to the same labels assigned to the PacketFabric Cloud Router | |
 | azure_resource_group | Yes | | The Azure Resource group |
 | azure_region | Yes | | The Azure Cloud region |
