@@ -130,14 +130,15 @@ export ARM_TENANT_ID="00000000-0000-0000-0000-000000000000"
 
 | Input Variable | Required | Default | Description |
 |----------------|----------|----------|------------|
-| name                      | Yes      | | The base name all Network services created in PacketFabric, Google and AWS |
-| labels                    | No       | terraform-cts | The labels to be assigned to the PacketFabric Cloud Router |
-| asn                       | No       | 4556 | The Autonomous System Number (ASN) for the PacketFabric Cloud Router |
-| capacity                  | No        | ">100Gbps" | The capacity of the PacketFabric Cloud Router |
-| regions                   | No       | ["US"] | The list of regions for the PacketFabric Cloud Router (["US", "UK"]) |
+| cr_id                     | No      | | The Circuit ID of the PacketFabric Cloud Router (if using an existing one) |
+| name                      | No      | | The name of the PacketFabric Cloud Router (if creating a new one) |
+| labels                    | No      | terraform-cts | The labels to be assigned to the PacketFabric Cloud Router |
+| asn                       | No      | 4556 | The Autonomous System Number (ASN) for the PacketFabric Cloud Router |
+| capacity                  | No      | ">100Gbps" | The capacity of the PacketFabric Cloud Router |
+| regions                   | No      | ["US"] | The list of regions for the PacketFabric Cloud Router (["US", "UK"]) |
 | aws_cloud_router_connections | Yes     | | A list of objects representing the AWS Cloud Router Connections (Private VIF) |
 | google_cloud_router_connections | Yes  | | A list of objects representing the Google Cloud Router Connections |
-| azure_cloud_router_connections | Yes  | | A list of objects representing the Azure Cloud Router Connections |
+| azure_cloud_router_connections | Yes   | | A list of objects representing the Azure Cloud Router Connections |
 
 **Note**: 
 
@@ -158,7 +159,7 @@ Please be aware that creating AWS or Azure Cloud Router connections can take up 
 
 | Input Variable | Required | Default | Description |
 |----------------|----------|----------|------------|
-| name                      | Yes      | | The name of the PacketFabric Cloud Router Connection and other resources created in Azure |
+| name                      | Yes      | | The name of the PacketFabric Cloud Router Connection and other resources created in AWS |
 | labels                    | No       | terraform | If not specified, default to the same labels assigned to the PacketFabric Cloud Router |
 | aws_region | Yes | | The AWS region |
 | aws_vpc_id | Yes | | The AWS VPC ID<br/>:warning: **must be in the region defined above and makes sure your VPC is not already attached to an existing Virtual Private Gateway**|

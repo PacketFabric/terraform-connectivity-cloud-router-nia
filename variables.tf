@@ -11,18 +11,19 @@ variable "services" {
   )
 }
 
-# Common variables
+# PacketFabric Cloud Router
 variable "name" {
   description = "The base name all Network services created in PacketFabric, Google and AWS."
   type        = string
-}
-variable "labels" {
-  description = "The labels to be assigned to the PacketFabric Cloud Router and Cloud Router Connections."
-  type        = list(string)
-  default     = ["terraform-cts"]
+  default     = null
 }
 
-# PacketFabric Cloud Router
+variable "cr_id" {
+  description = "The Cloud Router Circuit ID."
+  type        = string
+  default     = null
+}
+
 variable "asn" {
   description = "The Autonomous System Number (ASN) for the PacketFabric Cloud Router."
   type        = number
@@ -41,9 +42,10 @@ variable "regions" {
   default     = ["US"]
 }
 
-variable "cr_id" {
-  default     = null
-  description = "The Cloud Router Circuit ID created by this module automatically."
+variable "labels" {
+  description = "The labels to be assigned to the PacketFabric Cloud Router and Cloud Router Connections."
+  type        = list(string)
+  default     = ["terraform-cts"]
 }
 
 # PacketFabric Cloud Router Connection AWS
@@ -68,8 +70,8 @@ variable "aws_cloud_router_connections" {
   default = null
 
   validation {
-    condition     = length(coalesce(var.aws_cloud_router_connections, [])) <= 1
-    error_message = "You must provide no more than one AWS Cloud Router Connection."
+    condition     = length(coalesce(var.aws_cloud_router_connections, [])) <= 3
+    error_message = "You must provide no more than three AWS Cloud Router Connections."
   }
 }
 
