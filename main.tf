@@ -32,7 +32,7 @@ module "packetfabric" {
   asn      = var.asn
   capacity = var.capacity
   regions  = var.regions
-  labels   = concat(var.labels, [each.value.name])
+  labels   = concat(var.labels, [each.value.name]) # add the service name to the labels
   # PacketFabric Cloud Router Connection to Google
   google_cloud_router_connections = var.google_cloud_router_connections
   # PacketFabric Cloud Router Connection to AWS
