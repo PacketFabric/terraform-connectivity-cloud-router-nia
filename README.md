@@ -47,7 +47,7 @@ If you would like to see support for other cloud service providers (e.g. Oracle,
 
 | Name | Version |
 |------|---------|
-| [PacketFabric Terraform Cloud Router Module](https://registry.terraform.io/modules/PacketFabric/cloud-router-module/connectivity/0.1.0) | = 0.3.0 |
+| [PacketFabric Terraform Cloud Router Module](https://registry.terraform.io/modules/PacketFabric/cloud-router-module/connectivity/0.3.0) | = 0.3.0 |
 
 ### Before you begin
 

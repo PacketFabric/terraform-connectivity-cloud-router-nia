@@ -100,7 +100,7 @@ task {
   name           = "packetFabric-cloud-router"
   description    = "Automate multi-cloud connectivity with Consul services"
   module         = "packetfabric/cloud-router-nia/connectivity"
-  version        = "0.1.1"
+  version        = "0.3.0"
   providers      = ["packetfabric", "aws", "google"]
   condition "services" {
     names = ["nginx-demo-aws"]
