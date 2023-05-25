@@ -26,7 +26,7 @@ Ensure you have the following items available:
 - [AWS Access and Secret Keys](https://docs.aws.amazon.com/general/latest/gr/aws-security-credentials.html)
 - [Google Service Account](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances)
 - [PacketFabric Billing Account](https://docs.packetfabric.com/api/examples/account_uuid/)
-- [PacketFabric API key](https://docs.packetfabric.com/admin/my_account/keys/)
+- Create an SSH key pair (Download [PuttyGen](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) for Windows or use [ssh-keygen](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=mac) on Mac)
 
 ## Quick start
 
@@ -51,8 +51,8 @@ export AWS_SECRET_ACCESS_KEY="secret"
 export TF_VAR_gcp_project_id="my-project-id" # used for bash script used with gcloud module
 export GOOGLE_CREDENTIALS='{ "type": "service_account", "project_id": "demo-setting-1234", "private_key_id": "1234", "private_key": "-----BEGIN PRIVATE KEY-----\nsecret\n-----END PRIVATE KEY-----\n", "client_email": "demoapi@demo-setting-1234.iam.gserviceaccount.com", "client_id": "102640829015169383380", "auth_uri": "https://accounts.google.com/o/oauth2/auth", "token_uri": "https://oauth2.googleapis.com/token", "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/demoapi%40demo-setting-1234.iam.gserviceaccount.com" }'
 
-export TF_VAR_public_key="ssh-rsa AAAA...= user@mac.lan" # used to create to access to the demo instances in AWS/Google
-export TF_VAR_my_ip="1.2.3.1/32" # replace with your public IP address (used in AWS/Google security groups)
+export TF_VAR_public_key="ssh-rsa AAAA..." # used to create to access to the demo instances in AWS/Google
+export TF_VAR_my_ip="1.2.3.1/32" # replace with your public IP address (used in AWS/Google security groups) - https://www.whatismyip.com/
 ```
 
 **Note**: To convert a pretty-printed JSON into a single line JSON string: `jq -c '.' google_credentials.json`.
@@ -111,7 +111,7 @@ nginx-google   10.5.1.20:8301  alive   client  1.15.2  2         dc1  default   
 
 7. Now, proceed to remove the `nginx-aws` node from the Consul cluster. This action will automatically trigger the destruction of the associated PacketFabric Cloud Router.
 
-To execute this step, SSH to the Consul Client running in AWS using `ubuntu` user and its public IP, then run the following commands:
+To execute this step, SSH to the **Consul Client** running in AWS using `ubuntu` user and its public IP, then run the following commands:
 
 ```
 consul members

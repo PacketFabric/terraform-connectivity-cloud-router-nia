@@ -37,18 +37,24 @@ mkdir /etc/consul.d/cts-packetfabric
 sudo cat <<EOT > /etc/consul.d/cts-packetfabric/packetfabric-cloud-router.tfvars
 name = "packetfabric-cts"
 
-aws_cloud_router_connections = {
-  aws_region = "${aws_region}"
-  aws_vpc_id = "${aws_vpc_id}"
-  aws_pop    = "${aws_pop}"
-}
+aws_cloud_router_connections = [
+  {
+    name       = "packetfabric-cts-aws"
+    aws_region = "${aws_region}"
+    aws_vpc_id = "${aws_vpc_id}"
+    aws_pop    = "${aws_pop}"
+  }
+]
 
-google_cloud_router_connections = {
-  google_project  = "${google_project}"
-  google_region   = "${google_region}"
-  google_network  = "${google_network}"
-  google_pop      = "${google_pop}"
-}
+google_cloud_router_connections = [
+  {
+    name            = "packetfabric-cts-google"
+    google_project  = "${google_project}"
+    google_region   = "${google_region}"
+    google_network  = "${google_network}"
+    google_pop      = "${google_pop}"
+  }
+]
 EOT
 
 sudo cat <<EOT > /etc/consul.d/cts-packetfabric/cts-config.hcl
@@ -94,7 +100,7 @@ task {
   name           = "packetFabric-cloud-router"
   description    = "Automate multi-cloud connectivity with Consul services"
   module         = "packetfabric/cloud-router-nia/connectivity"
-  version        = "0.1.1"
+  version        = "0.3.0"
   providers      = ["packetfabric", "aws", "google"]
   condition "services" {
     names = ["nginx-demo-aws"]

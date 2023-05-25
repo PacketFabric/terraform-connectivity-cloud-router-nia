@@ -2,7 +2,7 @@ terraform {
   required_providers {
     packetfabric = {
       source  = "PacketFabric/packetfabric"
-      version = ">= 1.5.0"
+      version = ">= 1.6.0"
     }
     aws = {
       source  = "hashicorp/aws"
@@ -18,23 +18,27 @@ terraform {
 }
 
 provider "aws" {
+  # we have to set it to something in case no aws connections are defined
   region = var.aws_cloud_router_connections != null ? var.aws_cloud_router_connections.aws_region : "us-east-1"
 }
 
 module "packetfabric" {
   for_each = var.services
   source   = "packetfabric/cloud-router-module/connectivity"
-  version  = "0.1.0"
-  name     = var.name
-  labels   = concat(var.labels, [each.value.name])
+  version  = "0.3.0"
   # PacketFabric Cloud Router
+  name     = var.name
+  cr_id    = var.cr_id
   asn      = var.asn
   capacity = var.capacity
   regions  = var.regions
+  labels   = concat(var.labels, [each.value.name]) # add the service name to the labels
   # PacketFabric Cloud Router Connection to Google
   google_cloud_router_connections = var.google_cloud_router_connections
   # PacketFabric Cloud Router Connection to AWS
   aws_cloud_router_connections = var.aws_cloud_router_connections
+  # PacketFabric Cloud Router Connection to Azure
+  azure_cloud_router_connections = var.azure_cloud_router_connections
 }
 
 locals {
